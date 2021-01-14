@@ -2,12 +2,12 @@
   <div>
     <div class="perfilTorre">
       <input v-model="perfilBuscar" type="text" />
-      <button>Buscar</button>
+      <button @click="buscarInfoPerfil">Buscar</button>
     </div>
     <div>
       <DragableCard></DragableCard>
-      <!--- <img :src="infoBio.person.picture" alt="" /> -->
-      <!--- <p>{{ infoBio.person.name }}</p> --->
+      <img :src="infoBio.picture" alt="" />
+      <p>{{ infoBio.name }}</p>
     </div>
   </div>
 </template>
@@ -23,18 +23,14 @@ export default {
   data() {
     return {
       infoBio: {},
-      perfilBuscar: 'torrenegra',
+      perfilBuscar: '',
     }
   },
   methods: {
-    /*buscarInfoPerfil() {
-      axios
-        .get('http://localhost:4000/api/bio/' + this.perfilBuscar)
-        .then((res) => {
-          this.infoBio = res.data
-        })
-      console.log(this.infoBio)
-    },*/
+    async buscarInfoPerfil() {
+      const result = await this.$api.getProfile(this.perfilBuscar)
+      this.infoBio = (await result.json()).person
+    },
   },
 }
 </script>

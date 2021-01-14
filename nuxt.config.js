@@ -2,7 +2,7 @@ export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   target: 'server',
   server: {
-    host: '0.0.0.0'
+    host: '0.0.0.0',
   },
   head: {
     title: 'torrePrueba',
@@ -14,11 +14,20 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
+  serverMiddleware: [
+    { path: '/api', handler: '~/api/index.js' },
+    { path: '/graphql', handler: '~/api/graphql.js' },
+  ],
+
+  env: {
+    MONGO_URI:
+      'mongodb+srv://torreUser:dNu332NjAJnleWyE@geocerca.hkxaj.mongodb.net/torrepruebadb?retryWrites=true&w=majority',
+  },
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: ['~/plugins/api-consume.js'],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -29,7 +38,8 @@ export default {
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '~/modules/mongodb-setup.js',
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
