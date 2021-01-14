@@ -19,15 +19,23 @@
         @draggedUp="emitAndNext('skip')"
         class="rounded-borders card card--one"
       >
-        <div style="height: 100%">
+        <div style="height: 100%" class="card--info">
           <img
-            :src="require(`../assets/images/${current.src}`)"
+            :src="current.organizations[0].picture"
             class="rounded-borders"
           />
-          <div class="text">
-            <h2>
-              {{ current.name }}, <span>{{ current.age }}</span>
-            </h2>
+          <div class="card--company">
+            <p>{{ current.organizations[0].name }}</p>
+            <p>{{ current.objective }}</p>
+            <p>{{ current.locations[0] }}</p>
+            <p v-if="current.compensation != null">
+              {{ current.compensation.data.minAmount }} -
+              {{ current.compensation.data.maxAmount }}
+              {{ current.compensation.data.currency }}
+            </p>
+            <p v-if="current.compensation != null">
+              {{ capitalizeFirstLetter(current.compensation.data.periodicity) }}
+            </p>
           </div>
         </div>
       </Vue2InteractDraggable>
@@ -37,26 +45,30 @@
       class="rounded-borders card card--two fixed fixed--center"
       style="z-index: 2"
     >
-      <div style="height: 100%">
-        <img
-          :src="require(`~/assets/images/${next.src}`)"
-          class="rounded-borders"
-        />
-        <div class="text">
-          <h2>
-            {{ next.name }}, <span>{{ next.age }}</span>
-          </h2>
+      <div style="height: 100%" class="card--info">
+        <img :src="next.organizations[0].picture" class="rounded-borders" />
+        <div class="card--company">
+          <p>{{ next.organizations[0].name }}</p>
+          <p>{{ next.objective }}</p>
+          <p>{{ next.locations[0] }}</p>
+          <p v-if="next.compensation != null">
+            {{ next.compensation.data.minAmount }} -
+            {{ next.compensation.data.maxAmount }}
+            {{ next.compensation.data.currency }}
+          </p>
+          <p v-if="next.compensation != null">
+            {{ capitalizeFirstLetter(next.compensation.data.periodicity) }}
+          </p>
         </div>
       </div>
     </div>
     <div
-      v-if="index + 2 < cards.length"
+      v-if="index + 2 < infoJobs.length"
       class="rounded-borders card card--three fixed fixed--center"
       style="z-index: 1"
     >
-      <div style="height: 100%"></div>
+      <div style="height: 100%" class="card--info"></div>
     </div>
-    {{ like }}
     <div class="footer fixed">
       <div class="btn btn--decline" @click="reject">
         <i class="material-icons">close</i>
@@ -91,30 +103,23 @@ export default {
         draggedLeft: EVENTS.REJECT,
         draggedUp: EVENTS.SKIP,
       },
-      cards: [
-        { src: 'karina.jpg', name: 'Karina', age: 7 },
-        { src: 'alexander.jpg', name: 'Alexander', age: 5 },
-        { src: 'bona.jpg', name: 'Bona', age: 3 },
-        { src: 'ichi.jpg', name: 'Ichi', age: 7 },
-        { src: 'lloyd.jpg', name: 'Lloyd', age: 4 },
-        { src: 'luiza.jpg', name: 'Luiza', age: 9 },
-        { src: 'max.jpg', name: 'Max', age: 6 },
-        { src: 'mona.jpg', name: 'Mona', age: 3 },
-        { src: 'naru.jpg', name: 'Naru', age: 7 },
-        { src: 'ramdan.jpg', name: 'Ramdan', age: 8 },
-        { src: 'rikki-austin.jpg', name: 'Rikki Austin', age: 3 },
-        { src: 'tucker.jpg', name: 'Tucker', age: 9 },
-        { src: 'uriel.jpg', name: 'Uriel', age: 6 },
-        { src: 'zoe.jpg', name: 'Zoe', age: 2 },
-      ],
+      infoJobs: [],
     }
+  },
+  async created() {
+    const result = await this.$api.getJobs()
+    this.infoJobs = (await result.json()).results
+    console.log(this.infoJobs)
   },
   computed: {
     current() {
-      return this.cards[this.index]
+      return this.infoJobs[this.index]
     },
     next() {
-      return this.cards[this.index + 1]
+      return this.infoJobs[this.index + 1]
+    },
+    nextThree() {
+      return this.infoJobs[this.index + 2]
     },
     ...mapState({
       like: (store) => store.like,
@@ -149,6 +154,9 @@ export default {
     ...mapMutations({
       putLikeJob: 'putLikeJob',
     }),
+    capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1)
+    },
   },
 }
 </script>
@@ -253,17 +261,33 @@ export default {
   }
 }
 .rounded-borders {
-  border-radius: 12px;
+  border-radius: 15px;
 }
+
 .card {
-  width: 30rem;
+  width: 40vh;
   height: 60vh;
+  background-color: white;
   color: white;
-  img {
-    object-fit: cover;
-    display: block;
+  box-shadow: 0 3px 6px #00000025;
+
+  &--info {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+  }
+  &--company {
+    color: black;
+  }
+  img {
+    object-fit: cover;
+    width: 10rem;
+    height: 10rem;
+    margin-top: 5rem;
   }
   &--one {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 1px rgba(0, 0, 0, 0.14),
@@ -275,7 +299,6 @@ export default {
       0 10px 14px 1px rgba(0, 0, 0, 0.14), 0 4px 18px 3px rgba(0, 0, 0, 0.12);
   }
   &--three {
-    background: rgba(black, 0.8);
     transform: translate(-46%, -46%);
     box-shadow: 0 10px 13px -6px rgba(0, 0, 0, 0.2),
       0 20px 31px 3px rgba(0, 0, 0, 0.14), 0 8px 38px 7px rgba(0, 0, 0, 0.12);

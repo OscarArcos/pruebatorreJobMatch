@@ -24,6 +24,7 @@ export default {
     return {
       infoBio: {},
       perfilBuscar: '',
+      infoJobs: []
     }
   },
   methods: {
