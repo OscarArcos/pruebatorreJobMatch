@@ -1,11 +1,15 @@
-export const state = function() {
-    return {
-        like: false
-    }
+export const state = function () {
+  return {
+    user: null,
+    buscoTrabajo: true,
+  }
 }
 
 export const mutations = {
-    putLikeJob(state, like) {
-        state.like = like
-    }
+  putUserPlaying(state, user) {
+    state.user = user
+  },
+  putTypePlaying(state, buscoTrabajo) {
+    state.buscoTrabajo = buscoTrabajo
+  },
 }

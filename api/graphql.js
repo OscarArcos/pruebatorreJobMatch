@@ -10,7 +10,7 @@ var schema = buildSchema(`
   }
 
   type Mutation {
-      createLikes(like: String): ID
+      createLikes(quien: String, aquien: String): ID
       updateLikes(id:ID!, like: String): ID
   }
 `)
@@ -23,9 +23,10 @@ var root = {
 
     return result.like
   },
-  async createLikes({ like }) {
+  async createLikes({ quien, aquien }) {
     let newLike = {
-      like: like,
+      quien: quien,
+      aquien: aquien,
     }
 
     await likesCollection.insertOne(newLike)

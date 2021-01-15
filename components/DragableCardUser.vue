@@ -20,22 +20,10 @@
         class="rounded-borders card card--one"
       >
         <div style="height: 100%" class="card--info">
-          <img
-            :src="current.organizations[0].picture"
-            class="rounded-borders"
-          />
+          <img :src="current.picture" class="rounded-borders" />
           <div class="card--company">
-            <p>{{ current.organizations[0].name }}</p>
-            <p>{{ current.objective }}</p>
-            <p>{{ current.locations[0] }}</p>
-            <p v-if="current.compensation != null">
-              {{ current.compensation.data.minAmount }} -
-              {{ current.compensation.data.maxAmount }}
-              {{ current.compensation.data.currency }}
-            </p>
-            <p v-if="current.compensation != null">
-              {{ capitalizeFirstLetter(current.compensation.data.periodicity) }}
-            </p>
+            <p>{{ current.name }}</p>
+            <p>{{ current.professionalHeadline }}</p>
           </div>
         </div>
       </Vue2InteractDraggable>
@@ -46,24 +34,15 @@
       style="z-index: 2"
     >
       <div style="height: 100%" class="card--info">
-        <img :src="next.organizations[0].picture" class="rounded-borders" />
+        <img :src="next.picture" class="rounded-borders" />
         <div class="card--company">
-          <p>{{ next.organizations[0].name }}</p>
-          <p>{{ next.objective }}</p>
-          <p>{{ next.locations[0] }}</p>
-          <p v-if="next.compensation != null">
-            {{ next.compensation.data.minAmount }} -
-            {{ next.compensation.data.maxAmount }}
-            {{ next.compensation.data.currency }}
-          </p>
-          <p v-if="next.compensation != null">
-            {{ capitalizeFirstLetter(next.compensation.data.periodicity) }}
-          </p>
+          <p>{{ next.name }}</p>
+          <p>{{ next.professionalHeadline }}</p>
         </div>
       </div>
     </div>
     <div
-      v-if="index + 2 < infoJobs.length"
+      v-if="index + 2 < infoBios.length"
       class="rounded-borders card card--three fixed fixed--center"
       style="z-index: 1"
     >
@@ -110,23 +89,23 @@ export default {
         draggedLeft: EVENTS.REJECT,
         draggedUp: EVENTS.SKIP,
       },
-      infoJobs: [],
+      infoBios: [],
     }
   },
   async created() {
-    const result = await this.$api.getJobs()
-    this.infoJobs = (await result.json()).results
-    console.log(this.infoJobs)
+    const result = await this.$api.getBios()
+    this.infoBios = (await result.json()).results
+    console.log(this.infoBios)
   },
   computed: {
     current() {
-      return this.infoJobs[this.index]
+      return this.infoBios[this.index]
     },
     next() {
-      return this.infoJobs[this.index + 1]
+      return this.infoBios[this.index + 1]
     },
     nextThree() {
-      return this.infoJobs[this.index + 2]
+      return this.infoBios[this.index + 2]
     },
     ...mapState({
       user: (store) => store.user,

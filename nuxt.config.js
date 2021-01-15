@@ -27,7 +27,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: ['~/plugins/api-profile.js'],
+  plugins: ['~/plugins/api-torre.js'],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -39,9 +39,17 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/apollo',
     '~/modules/mongodb-setup.js',
   ],
 
+  apollo: {
+    clientConfigs: {
+      default: {
+        httpEndpoint: 'http://192.168.0.22:3000/graphql',
+      },
+    },
+  },
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
     baseURL: 'http://localhost:4000/api',
