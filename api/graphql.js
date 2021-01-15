@@ -6,7 +6,8 @@ const likesCollection = mongo.db('torrepruebadb').collection('likes')
 
 var schema = buildSchema(`
   type Query {
-    getLikes(id:ID!): String
+    getLikes(quien: String): ID
+    getLikesC(aquien: String): ID
   }
 
   type Mutation {
@@ -16,12 +17,19 @@ var schema = buildSchema(`
 `)
 
 var root = {
-  async getLikes({ id }) {
+  async getLikes({ quien }) {
     let result = await likesCollection.findOne({
-      _id: new ObjectID(id),
+      quien: quien,
     })
 
-    return result.like
+    return result.aquien
+  },
+  async getLikesC({ aquien }) {
+    let result = await likesCollection.findOne({
+        aquien: aquien,
+    })
+
+    return result.quien
   },
   async createLikes({ quien, aquien }) {
     let newLike = {

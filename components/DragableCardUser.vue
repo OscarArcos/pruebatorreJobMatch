@@ -81,6 +81,11 @@ const CREATE_LIKE = gql`
     createLikes(quien: $quien, aquien: $aquien)
   }
 `
+const SEARCH_QUIEN = gql`
+  query getLikesC($aquien: String!) {
+    getLikesC(aquien: $aquien)
+  }
+`
 
 const EVENTS = {
   MATCH: 'match',
@@ -119,6 +124,8 @@ export default {
     },
     ...mapState({
       user: (store) => store.user,
+      aquien: (store) => store.aquien,
+      quien: (store) => store.quien,
     }),
   },
   methods: {
@@ -143,6 +150,20 @@ export default {
             aquien: idUser, // this should be the same name as the one the server is expecting
           },
         })
+        const resultQ = await this.$apollo.query({
+          query: SEARCH_QUIEN,
+          variables: {
+            aquien: idUser,
+          },
+        })
+        const quienDB = resultQ.data.getLikesC
+        this.putQuien(quienDB)
+        console.log(this.aquien, this.quien)
+        if (this.aquien === this.quien) {
+          alert('match')
+        } else {
+          console.log('NO MATCH')
+        }
       } else if (event === 'reject') {
         console.log('NoLike', this.index, this.current.id)
       } else {
@@ -158,6 +179,9 @@ export default {
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1)
     },
+    ...mapMutations({
+      putQuien: 'putQuien',
+    }),
   },
 }
 </script>
