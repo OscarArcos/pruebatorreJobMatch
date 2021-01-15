@@ -46,7 +46,7 @@ export default {
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: process.env.GRAPHQL_CONECCT || 'http://192.168.0.22:3000/graphql',
+        httpEndpoint: 'https://torreprueba-pxyrt4ufoq-uc.a.run.app/graphql',
       },
     },
   },
