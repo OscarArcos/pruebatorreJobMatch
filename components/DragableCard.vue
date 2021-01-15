@@ -174,8 +174,10 @@ export default {
         const aquienDB = result.data.getLikes
         this.putAquien(aquienDB)
         console.log(this.aquien, this.quien)
-        if (this.aquien == this.quien) {
+        if (this.aquien === this.quien) {
           alert('match')
+          this.putAquien('')
+          this.putQuien('')
         } else {
           console.log('NO MATCH')
         }
@@ -196,6 +198,7 @@ export default {
     },
     ...mapMutations({
       putAquien: 'putAquien',
+      putQuien: 'putQuien',
     }),
   },
 }

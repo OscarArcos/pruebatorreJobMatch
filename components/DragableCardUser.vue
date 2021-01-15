@@ -161,6 +161,8 @@ export default {
         console.log(this.aquien, this.quien)
         if (this.aquien === this.quien) {
           alert('match')
+          this.putAquien('')
+          this.putQuien('')
         } else {
           console.log('NO MATCH')
         }
@@ -181,6 +183,7 @@ export default {
     },
     ...mapMutations({
       putQuien: 'putQuien',
+      putAquien: 'putAquien',
     }),
   },
 }
