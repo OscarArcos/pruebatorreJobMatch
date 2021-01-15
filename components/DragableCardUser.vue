@@ -22,8 +22,13 @@
         <div style="height: 100%" class="card--info">
           <img :src="current.picture" class="rounded-borders" />
           <div class="card--company">
-            <p>{{ current.name }}</p>
-            <p>{{ current.professionalHeadline }}</p>
+            <p class="card__name">{{ current.name }}</p>
+            <p class="card__objective">{{ current.professionalHeadline }}</p>
+            <div class="card--infoRight">
+              <p>{{ current.skills[0].name }}</p>
+              <p>{{ current.skills[1].name }}</p>
+              <p>{{ current.skills[2].name }}</p>
+            </div>
           </div>
         </div>
       </Vue2InteractDraggable>
@@ -36,8 +41,13 @@
       <div style="height: 100%" class="card--info">
         <img :src="next.picture" class="rounded-borders" />
         <div class="card--company">
-          <p>{{ next.name }}</p>
-          <p>{{ next.professionalHeadline }}</p>
+          <p class="card__name">{{ next.name }}</p>
+          <p class="card__objective">{{ next.professionalHeadline }}</p>
+          <div class="card--infoRight">
+            <p>{{ next.skills[0].name }}</p>
+            <p>{{ next.skills[1].name }}</p>
+            <p>{{ next.skills[2].name }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -50,13 +60,13 @@
     </div>
     <div class="footer fixed">
       <div class="btn btn--decline" @click="reject">
-        <i class="material-icons">close</i>
+        <img src="~/assets/nope.png" alt="Logo" class="logosAbajo" />
       </div>
       <div class="btn btn--skip" @click="skip">
-        <i class="material-icons">call_missed</i>
+        <img src="~/assets/super-like.png" alt="Logo" class="logosAbajo" />
       </div>
       <div class="btn btn--like" @click="match">
-        <i class="material-icons">favorite</i>
+        <img src="~/assets/like.png" alt="Logo" class="logosAbajo" />
       </div>
     </div>
   </section>
@@ -123,12 +133,14 @@ export default {
     },
     async emitAndNext(event) {
       if (event === 'match') {
-        console.log('Like', this.index, this.current.id, this.user)
+        const result = await this.$api.getProfile(this.current.username)
+        const idUser = (await result.json()).person.id
+        console.log('Like', this.index, this.user, idUser)
         await this.$apollo.mutate({
           mutation: CREATE_LIKE,
           variables: {
             quien: this.user,
-            aquien: this.current.id, // this should be the same name as the one the server is expecting
+            aquien: idUser, // this should be the same name as the one the server is expecting
           },
         })
       } else if (event === 'reject') {
@@ -183,9 +195,9 @@ export default {
   }
 }
 .footer {
-  width: 77vw;
+  width: 50%;
   bottom: 0;
-  left: 50%;
+  left: 70%;
   transform: translateX(-50%);
   display: flex;
   padding-bottom: 30px;
@@ -218,7 +230,6 @@ export default {
     }
   }
   &--like {
-    background-color: red;
     padding: 0.5rem;
     color: white;
     box-shadow: 0 10px 13px -6px rgba(0, 0, 0, 0.2),
@@ -226,12 +237,6 @@ export default {
     i {
       font-size: 32px;
     }
-  }
-  &--decline {
-    color: red;
-  }
-  &--skip {
-    color: green;
   }
 }
 .flex {
@@ -244,7 +249,7 @@ export default {
 .fixed {
   position: fixed;
   &--center {
-    left: 50%;
+    left: 70%;
     top: 50%;
     transform: translate(-50%, -50%);
   }
@@ -259,7 +264,32 @@ export default {
   background-color: white;
   color: white;
   box-shadow: 0 3px 6px #00000025;
-
+  &__objective {
+    font-size: 1.2rem;
+    padding: 0 1rem;
+    margin: 0;
+    color: #cddc39;
+    font-weight: bold;
+  }
+  &__name {
+    margin-top: 1.3rem;
+    font-size: 0.8rem;
+    color: #00000080;
+  }
+  &--infoRight {
+    border: 2px solid #cddc39;
+    border-radius: 10px;
+    margin: 1rem;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    color: #00000080;
+    p {
+      margin: 0.5rem 0;
+    }
+  }
   &--info {
     width: 100%;
     height: 100%;
@@ -316,5 +346,9 @@ export default {
   to {
     transform: translate(-50%, -50%);
   }
+}
+.logosAbajo {
+  width: 100%;
+  height: 100%;
 }
 </style>

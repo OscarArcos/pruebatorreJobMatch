@@ -1,42 +1,10 @@
 <template>
   <div>
-    <div class="menuPrincipal">
-      <div class="menuTitulo">
-        <h2>OscArcos</h2>
-        <p>Jobs Match</p>
-      </div>
-      <div class="menuOpciones">
-        <ul>
-          <li><NuxtLink to="/">Home</NuxtLink></li>
-          <li><NuxtLink to="/about">About Me</NuxtLink></li>
-        </ul>
-      </div>
-    </div>
     <Nuxt />
   </div>
 </template>
 
 <style>
-.menuPrincipal {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 2rem;
-  background-color: rgba(0, 0, 0, 0.63);
-  color: white;
-}
-.menuTitulo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 200ms;
-}
-.menuTitulo h2, p {
-  margin: 0 1rem;
-}
-.menuTitulo:hover {
-  letter-spacing: 1px;
-}
 /* home route and active route will show in bold as it matches / and /about */
 a.nuxt-link-active {
   font-weight: bold;

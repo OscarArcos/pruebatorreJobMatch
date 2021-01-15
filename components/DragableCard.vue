@@ -25,17 +25,21 @@
             class="rounded-borders"
           />
           <div class="card--company">
-            <p>{{ current.organizations[0].name }}</p>
-            <p>{{ current.objective }}</p>
-            <p>{{ current.locations[0] }}</p>
-            <p v-if="current.compensation != null">
-              {{ current.compensation.data.minAmount }} -
-              {{ current.compensation.data.maxAmount }}
-              {{ current.compensation.data.currency }}
-            </p>
-            <p v-if="current.compensation != null">
-              {{ capitalizeFirstLetter(current.compensation.data.periodicity) }}
-            </p>
+            <p class="card__name">{{ current.organizations[0].name }}</p>
+            <p class="card__objective">{{ current.objective }}</p>
+            <div class="card--infoRight">
+              <p class="card__location">{{ current.locations[0] }}</p>
+              <p v-if="current.compensation != null" class="card__compensation">
+                {{ current.compensation.data.minAmount }} -
+                {{ current.compensation.data.maxAmount }}
+                {{ current.compensation.data.currency }}
+              </p>
+              <p v-if="current.compensation != null" class="card__periodicity">
+                {{
+                  capitalizeFirstLetter(current.compensation.data.periodicity)
+                }}
+              </p>
+            </div>
           </div>
         </div>
       </Vue2InteractDraggable>
@@ -48,17 +52,19 @@
       <div style="height: 100%" class="card--info">
         <img :src="next.organizations[0].picture" class="rounded-borders" />
         <div class="card--company">
-          <p>{{ next.organizations[0].name }}</p>
-          <p>{{ next.objective }}</p>
-          <p>{{ next.locations[0] }}</p>
-          <p v-if="next.compensation != null">
-            {{ next.compensation.data.minAmount }} -
-            {{ next.compensation.data.maxAmount }}
-            {{ next.compensation.data.currency }}
-          </p>
-          <p v-if="next.compensation != null">
-            {{ capitalizeFirstLetter(next.compensation.data.periodicity) }}
-          </p>
+          <p class="card__name">{{ next.organizations[0].name }}</p>
+          <p class="card__objective">{{ next.objective }}</p>
+          <div class="card--infoRight">
+            <p class="card__location">{{ next.locations[0] }}</p>
+            <p v-if="next.compensation != null" class="card__compensation">
+              {{ next.compensation.data.minAmount }} -
+              {{ next.compensation.data.maxAmount }}
+              {{ next.compensation.data.currency }}
+            </p>
+            <p v-if="next.compensation != null" class="card__periodicity">
+              {{ capitalizeFirstLetter(next.compensation.data.periodicity) }}
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -71,13 +77,13 @@
     </div>
     <div class="footer fixed">
       <div class="btn btn--decline" @click="reject">
-        <i class="material-icons">close</i>
+        <img src="~/assets/nope.png" alt="Logo" class="logosAbajo" />
       </div>
       <div class="btn btn--skip" @click="skip">
-        <i class="material-icons">call_missed</i>
+        <img src="~/assets/super-like.png" alt="Logo" class="logosAbajo" />
       </div>
       <div class="btn btn--like" @click="match">
-        <i class="material-icons">favorite</i>
+        <img src="~/assets/like.png" alt="Logo" class="logosAbajo" />
       </div>
     </div>
   </section>
@@ -204,9 +210,9 @@ export default {
   }
 }
 .footer {
-  width: 77vw;
+  width: 50%;
   bottom: 0;
-  left: 50%;
+  left: 70%;
   transform: translateX(-50%);
   display: flex;
   padding-bottom: 30px;
@@ -239,7 +245,6 @@ export default {
     }
   }
   &--like {
-    background-color: red;
     padding: 0.5rem;
     color: white;
     box-shadow: 0 10px 13px -6px rgba(0, 0, 0, 0.2),
@@ -247,12 +252,6 @@ export default {
     i {
       font-size: 32px;
     }
-  }
-  &--decline {
-    color: red;
-  }
-  &--skip {
-    color: green;
   }
 }
 .flex {
@@ -265,7 +264,7 @@ export default {
 .fixed {
   position: fixed;
   &--center {
-    left: 50%;
+    left: 70%;
     top: 50%;
     transform: translate(-50%, -50%);
   }
@@ -280,7 +279,32 @@ export default {
   background-color: white;
   color: white;
   box-shadow: 0 3px 6px #00000025;
-
+  &__objective {
+    font-size: 1.2rem;
+    padding: 0 1rem;
+    margin: 0;
+    color: #cddc39;
+    font-weight: bold;
+  }
+  &__name {
+    margin-top: 1.3rem;
+    font-size: 0.8rem;
+    color: #00000080;
+  }
+  &--infoRight {
+    border: 2px solid #cddc39;
+    border-radius: 10px;
+    margin: 1rem;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    color: #00000080;
+    p {
+      margin: 0.5rem 0;
+    }
+  }
   &--info {
     width: 100%;
     height: 100%;
@@ -337,5 +361,9 @@ export default {
   to {
     transform: translate(-50%, -50%);
   }
+}
+.logosAbajo {
+  width: 100%;
+  height: 100%;
 }
 </style>
